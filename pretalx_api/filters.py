@@ -15,8 +15,16 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from .metadata import version as __version__
+import datetime
+import dateutil.parser
 
-from .api import *
-from .exceptions import *
-from .filters import *
+
+def max_duration_filter(event, hours, minutes):
+    _time = datetime.datetime.strptime(event['duration'], "%H:%M").time()
+    duration = datetime.timedelta(hours=_time.hour, minutes=_time.minute)
+    return (duration <= datetime.timedelta(hours=hours, minutes=minutes))
+
+def ongoing_or_future_filter(event, max_ongoing):
+    now = datetime.datetime.now()
+    start = dateutil.parser.isoparse(event['date']).replace(tzinfo=None)
+    return (now < start) or ((now - start).total_seconds() <= (max_ongoing * 60))
