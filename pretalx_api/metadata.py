@@ -16,7 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 name = "pyPretalxAPI"
-version = "1.0.1"
+version = "1.0.2"
 description = "A Python wrapper for the pretalx API"
 license = "GPLv3"
 author = "Julian Metzler"

@@ -27,4 +27,7 @@ def max_duration_filter(event, hours, minutes):
 def ongoing_or_future_filter(event, max_ongoing):
     now = datetime.datetime.now()
     start = dateutil.parser.isoparse(event['date']).replace(tzinfo=None)
-    return (now < start) or ((now - start).total_seconds() <= (max_ongoing * 60))
+    _time = datetime.datetime.strptime(event['duration'], "%H:%M").time()
+    duration = datetime.timedelta(hours=_time.hour, minutes=_time.minute)
+    now_start_delta = (now - start)
+    return (now < start) or (now_start_delta.total_seconds() <= (max_ongoing * 60) and now_start_delta < duration)
